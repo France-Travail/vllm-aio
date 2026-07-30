@@ -14,7 +14,7 @@ jobs:
 
       - name: Check official vLLM release and sync
         env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
         run: |
           UPSTREAM_TAG=$(curl -s https://api.github.com/repos/vllm-project/vllm/releases/latest | jq -r .tag_name)
           CLEAN_UPSTREAM="${UPSTREAM_TAG#v}"
@@ -35,7 +35,7 @@ jobs:
             echo "$CLEAN_UPSTREAM" > VLLM_VERSION
             
             git add VLLM_VERSION
-            git commit -m "chore: bump vLLM target to $CLEAN_UPSTREAM"
+            git commit -m "update: bump vLLM target to $CLEAN_UPSTREAM"
             git push origin "$BRANCH_NAME"
             
             gh pr create \

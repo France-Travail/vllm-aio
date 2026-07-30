@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request
 
 
 class ArgumentsEndpointPlugin:
-    name = "agurments_endpoint_plugin"
+    name = "arguments_endpoint_plugin"
     required_tasks: tuple[str, ...] | None = None
 
     def attach_router(self, app: FastAPI) -> None:
