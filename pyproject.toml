@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vllm-aio"
+version = "0.1.0"
+description = "Custom vLLM ft endpoints"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi",
+    "starlette",
+]
+
+[project.entry-points."vllm.endpoint_plugins"]
+arguments_api = "vllm_arguments_endpoint_plugin:ArgumentsEndpointPlugin"
+
+[tool.setuptools.packages.find]
+where = ["plugins"]
