@@ -1,4 +1,4 @@
-VLLM_VERSION="${VLLM_VERSION:-0.26.0}"
+VLLM_VERSION="$(cat VLLM_VERSION | tr -d '[:space:]')"
 
 pip install --upgrade pip uv
 
