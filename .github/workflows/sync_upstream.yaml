@@ -1,0 +1,48 @@
+name: Check Upstream vLLM Release
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Tourne tous les jours à 2h du matin
+  workflow_dispatch:
+
+jobs:
+  check-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check official vLLM release and sync
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          UPSTREAM_TAG=$(curl -s https://api.github.com/repos/vllm-project/vllm/releases/latest | jq -r .tag_name)
+          CLEAN_UPSTREAM="${UPSTREAM_TAG#v}"
+          echo "Latest official vLLM tag is: $CLEAN_UPSTREAM"
+          
+          LOCAL_VERSION=$(cat VLLM_VERSION | tr -d '[:space:]')
+          echo "Our current vLLM version: $LOCAL_VERSION"
+          
+          if [ "$CLEAN_UPSTREAM" != "null" ] && [ "$CLEAN_UPSTREAM" != "$LOCAL_VERSION" ]; then
+            echo "Update needed! Proposing a Pull Request..."
+            
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            
+            BRANCH_NAME="update-vllm-to-$CLEAN_UPSTREAM"
+            git checkout -b "$BRANCH_NAME"
+            
+            echo "$CLEAN_UPSTREAM" > VLLM_VERSION
+            
+            git add VLLM_VERSION
+            git commit -m "chore: bump vLLM target to $CLEAN_UPSTREAM"
+            git push origin "$BRANCH_NAME"
+            
+            gh pr create \
+              --title "Update vLLM base image to $CLEAN_UPSTREAM" \
+              --body "A new version of vLLM has been released! Merge this PR to update the \`VLLM_VERSION\` file. Then, you can manually draft a new release for this repository when you are ready to publish the Docker image." \
+              --base main \
+              --head "$BRANCH_NAME"
+          else
+            echo "We are up to date."
+          fi
