@@ -4,9 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vllm-aio"
-version = "0.1.0"
 description = "Custom vLLM ft endpoints"
 requires-python = ">=3.10"
+
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = {file = "version.txt"}
 
 [project.entry-points."vllm.endpoint_plugins"]
 arguments_api = "vllm_arguments_endpoint_plugin:ArgumentsEndpointPlugin"

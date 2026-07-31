@@ -20,10 +20,11 @@ jobs:
           CLEAN_UPSTREAM="${UPSTREAM_TAG#v}"
           echo "Latest official vLLM tag is: $CLEAN_UPSTREAM"
           
-          LOCAL_VERSION=$(cat VLLM_VERSION | tr -d '[:space:]')
-          echo "Our current vLLM version: $LOCAL_VERSION"
+          LOCAL_VLLM_VERSION=$(cat VLLM_VERSION | tr -d '[:space:]')
+          LOCAL_VERSION=$(cat version.txt | tr -d '[:space:]')
+          echo "Our current vLLM version: $LOCAL_VLLM_VERSION"
           
-          if [ "$CLEAN_UPSTREAM" != "null" ] && [ "$CLEAN_UPSTREAM" != "$LOCAL_VERSION" ]; then
+          if [ "$CLEAN_UPSTREAM" != "null" ] && [ "$CLEAN_UPSTREAM" != "$LOCAL_VLLM_VERSION" ]; then
             echo "Update needed! Proposing a Pull Request..."
             
             git config user.name "github-actions[bot]"
@@ -33,8 +34,14 @@ jobs:
             git checkout -b "$BRANCH_NAME"
             
             echo "$CLEAN_UPSTREAM" > VLLM_VERSION
-            
             git add VLLM_VERSION
+
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$LOCAL_VERSION"
+            PATCH=$((PATCH + 1))
+            NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+            echo "$NEW_VERSION" > version.txt
+            git add version.txt
+            
             git commit -m "update: bump vLLM target to $CLEAN_UPSTREAM"
             git push origin "$BRANCH_NAME"
             
