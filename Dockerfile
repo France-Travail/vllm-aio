@@ -10,6 +10,6 @@ COPY plugins/ ./plugins/
 RUN uv pip install --system .
 
 # List all plugins with a simple comma
-ENV VLLM_PLUGINS="arguments_api"
+ENV VLLM_PLUGINS="liveness_api,readiness_api"
 
 ENTRYPOINT ["vllm", "serve"]
