@@ -73,4 +73,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            VLLM_IMAGE_TAG=${{ env.VLLM_TARGET_VERSION }}
+            VLLM_VERSION_IMAGE=${{ env.VLLM_TARGET_VERSION }}
