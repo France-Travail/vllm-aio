@@ -14,6 +14,9 @@ version = {file = "version.txt"}
 
 [project.entry-points."vllm.endpoint_plugins"]
 arguments_api = "vllm_arguments_endpoint_plugin:ArgumentsEndpointPlugin"
+liveness_api = "vllm_liveness_plugin:LivenessPlugin"
+readiness_api = "vllm_readiness_plugin:ReadinessPlugin"
+
 
 [tool.setuptools.packages.find]
 where = ["plugins"]
