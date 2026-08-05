@@ -16,6 +16,7 @@ version = {file = "version.txt"}
 arguments_api = "vllm_arguments_endpoint_plugin:ArgumentsEndpointPlugin"
 liveness_api = "vllm_liveness_plugin:LivenessPlugin"
 readiness_api = "vllm_readiness_plugin:ReadinessPlugin"
+model_instance = "vllm_model_instance_plugin:ModelInstancePlugin"
 
 
 [tool.setuptools.packages.find]
