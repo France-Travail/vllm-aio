@@ -27,7 +27,7 @@ class _AddModelInstanceHeaderMiddleware:
         self.header_name = header_name
     
     def _matches(self, path: str) -> bool:
-        return path in self.paths or path.startswith("/v1/responses/")
+        return any(p in path for p in self.paths)
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] != "http" or not self._matches(scope["path"]):
