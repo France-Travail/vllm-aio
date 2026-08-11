@@ -58,7 +58,7 @@ jobs:
 
             gh release create "v$NEW_VERSION" \
               --target main \
-              --title "$NEW_VERSION" \
+              --title "v$NEW_VERSION" \
               --notes "[#$PR_NUMBER]($PR_URL) : vLLM $UPSTREAM_TAG"
               
           else
