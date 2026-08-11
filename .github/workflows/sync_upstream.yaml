@@ -47,7 +47,7 @@ jobs:
             
             PR_URL=$(gh pr create \
               --title "Update vLLM base image to $CLEAN_UPSTREAM" \
-              --body "A new version of vLLM has been released!\
+              --body "A new version of vLLM has been released!"\
               --base main \
               --head "$BRANCH_NAME")
 
