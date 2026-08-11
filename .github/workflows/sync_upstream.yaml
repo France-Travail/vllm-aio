@@ -45,11 +45,22 @@ jobs:
             git commit -m "update: bump vLLM target to $CLEAN_UPSTREAM"
             git push origin "$BRANCH_NAME"
             
-            gh pr create \
+            PR_URL=$(gh pr create \
               --title "Update vLLM base image to $CLEAN_UPSTREAM" \
-              --body "A new version of vLLM has been released! Merge this PR to update the \`VLLM_VERSION\` file. Then, you can manually draft a new release for this repository when you are ready to publish the Docker image." \
+              --body "A new version of vLLM has been released!\
               --base main \
-              --head "$BRANCH_NAME"
+              --head "$BRANCH_NAME")
+
+            PR_NUMBER=$(basename "$PR_URL")
+            echo "PR created: $PR_URL (#$PR_NUMBER)"
+
+            gh pr merge "$BRANCH_NAME" --merge --admin
+
+            gh release create "$NEW_VERSION" \
+              --target main \
+              --title "$NEW_VERSION" \
+              --notes "[#$PR_NUMBER]($PR_URL) : vLLM $UPSTREAM_TAG"
+              
           else
             echo "We are up to date."
           fi
