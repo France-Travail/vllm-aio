@@ -54,7 +54,7 @@ jobs:
             PR_NUMBER=$(basename "$PR_URL")
             echo "PR created: $PR_URL (#$PR_NUMBER)"
 
-            gh pr merge "$BRANCH_NAME" --merge --admin
+            gh pr merge "$BRANCH_NAME" --squash --admin
 
             gh release create "$NEW_VERSION" \
               --target main \
